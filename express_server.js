@@ -9,6 +9,9 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// Added Body parser
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -25,14 +28,36 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+// Added GET route to show the form
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
+
 // Create route for urls
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
-  });
+});
 
-  // Create route for urls/:id
+// Create route for urls/:id
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
-  });
+});
+
+//Added a POST route to receive the form submission
+app.post("/urls", (req, res) =>{
+  console.log(req.body);
+  res.send("Ok");
+});
+
+//Generate a Random Short URL ID
+const generateRandomString = function() {
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let randomUrl = "";
+  let shortUrlLength = 6;
+  for (let i = 0; i < shortUrlLength; i++) {
+    randomUrl += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return randomUrl;
+};
