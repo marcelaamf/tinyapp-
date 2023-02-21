@@ -2,13 +2,20 @@ const express = require('express');
 const app = express();
 const PORT = 8080;
 
+/**CONFIG**/
 app.set("view engine", "ejs");
 
+/**DATABASE**/
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
+/**MIDDLEWARE**/
+// Body parser
+app.use(express.urlencoded({ extended: true }));
+
+/**HELPER FUNCTIONS**/
 //Generate a Random Short URL ID
 const generateRandomString = function() {
   const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,15 +27,9 @@ const generateRandomString = function() {
   return randomUrl;
 };
 
-// Added Body parser
-app.use(express.urlencoded({ extended: true }));
-
+/**HTML**/
 app.get("/", (req, res) => {
   res.send("Hello!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Example app listening on ${PORT}!`);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -39,24 +40,25 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-// Added GET route to show the form
+/****ROUTES****/
+// Route for new url page
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-// Create route for urls
+// Route for urls main page
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
-// Create route for urls/:id
+// Route for urls ids page
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
 
-//Added a POST route to receive the form submission
+//POST route to receive the form submission
 app.post("/urls", (req, res) =>{
   const id = generateRandomString();
   urlDatabase[id] = req.body.longURL;
@@ -71,4 +73,16 @@ app.get("/u/:id", (req, res) => {
     return;
   }
   res.redirect(longURL);
+});
+
+//POST route to remove a URL resource
+app.post('/urls/:id/delete', (req, res) =>{
+  const id = req.params.id;
+  delete urlDatabase[id];
+  res.redirect("/urls");
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on ${PORT}!`);
 });
