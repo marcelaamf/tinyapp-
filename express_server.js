@@ -9,6 +9,17 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+//Generate a Random Short URL ID
+const generateRandomString = function() {
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let randomUrl = "";
+  let shortUrlLength = 6;
+  for (let i = 0; i < shortUrlLength; i++) {
+    randomUrl += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return randomUrl;
+};
+
 // Added Body parser
 app.use(express.urlencoded({ extended: true }));
 
@@ -47,17 +58,17 @@ app.get("/urls/:id", (req, res) => {
 
 //Added a POST route to receive the form submission
 app.post("/urls", (req, res) =>{
-  console.log(req.body);
-  res.send("Ok");
+  const id = generateRandomString();
+  urlDatabase[id] = req.body.longURL;
+  res.redirect(`/urls/${id}`);
 });
 
-//Generate a Random Short URL ID
-const generateRandomString = function() {
-  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let randomUrl = "";
-  let shortUrlLength = 6;
-  for (let i = 0; i < shortUrlLength; i++) {
-    randomUrl += chars[Math.floor(Math.random() * chars.length)];
+//Redirect any request to short url to its longURL
+app.get("/u/:id", (req, res) => {
+  const longURL = urlDatabase[req.params.id];
+  if (!longURL) {
+    res.status(404).send("Sorry, page not found");
+    return;
   }
-  return randomUrl;
-};
+  res.redirect(longURL);
+});
