@@ -41,47 +41,54 @@ app.get("/hello", (req, res) => {
 });
 
 /****ROUTES****/
-// Route for new url page
+// GET route for new url page
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-// Route for urls main page
+// GET route for urls main page
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
-// Route for urls ids page
+// GET route for short urls  page
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
 
-//POST route to receive the form submission
+//POST route to generate new url
 app.post("/urls", (req, res) =>{
   const id = generateRandomString();
   urlDatabase[id] = req.body.longURL;
   res.redirect(`/urls/${id}`);
 });
 
-//Redirect any request to short url to its longURL
+//GET any request to the short url an take it to its longURL
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id];
   if (!longURL) {
-    res.status(404).send("Sorry, page not found");
+    res.status(404).send("Sorry, page not found!");
     return;
   }
   res.redirect(longURL);
 });
 
-//POST route to remove a URL resource
+//POST route to remove a URL 
 app.post('/urls/:id/delete', (req, res) =>{
   const id = req.params.id;
   delete urlDatabase[id];
   res.redirect("/urls");
 });
 
+//POST route to edit a shortURL
+app.post('/urls/:id', (req, res) =>{
+const id = req.params.id;
+const newId = req.body.longURL;
+urlDatabase[id] = newId;
+res.redirect("/urls");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on ${PORT}!`);
