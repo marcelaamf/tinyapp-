@@ -70,18 +70,34 @@ const generateRandomString = function() {
 //
 // GET route for new url page
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const userId = req.cookies.userId;
+  const user = users[userId];
+  const templateVars = {
+  user: user
+  };
+  res.render("urls_new", templateVars);
 });
 
 // GET route for urls main page
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+  const userId = req.cookies.userId;
+  const user = users[userId];
+  const templateVars = { 
+    urls: urlDatabase, 
+    user: users[userId]
+  };
+    res.render("urls_index", templateVars);
 });
 
 // GET route for short urls  page
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+  const userId = req.cookies.userId;
+  const user = users[userId];
+  const templateVars = { 
+    id: req.params.id, 
+    longURL: urlDatabase[req.params.id], 
+    user: users[userId]
+  };
   res.render("urls_show", templateVars);
 });
 
@@ -119,8 +135,13 @@ res.redirect("/urls");
 
 //GET to load the login page
 app.get('/login', (req, res) => {
-  res.render("login");
-})
+  const userId = req.cookies.userId;
+  const user = users[userId];
+  const templateVars = {
+  user: user
+  };
+  res.render("login", templateVars);
+});
 
 //POST to create an endpoint to the login page
 app.post("/login", (req, res) => {
