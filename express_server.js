@@ -143,7 +143,7 @@ app.get('/login', (req, res) => {
   res.render("login", templateVars);
 });
 
-//POST to create an endpoint to the login page
+//POST to the login page
 app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -168,8 +168,11 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
-
-
+// Post to clear the user cookies and logout
+app.post("/logout", (req, res) => {
+res.clearCookie('userId');
+res.redirect ("/urls");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on ${PORT}!`);
