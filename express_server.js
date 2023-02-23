@@ -1,21 +1,44 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
+const cookie = require('cookie-parser');
 
-/**CONFIG**/
+//CONFIG
+//
 app.set("view engine", "ejs");
 
-/**DATABASE**/
+
+//DATABASE
+ //
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
-/**MIDDLEWARE**/
+const users = {
+  abc: {
+    username: "Marcela",
+    password: "123",
+    id: "abc"
+  },
+  mmn: {
+    username: "Mila",
+    password: "456",
+    id: "mmn"
+  }
+};
+
+
+//MIDDLEWARE//
+//
 // Body parser
 app.use(express.urlencoded({ extended: true }));
+// Cookie parser
+app.use(cookie());
 
-/**HELPER FUNCTIONS**/
+
+//HELPER FUNCTIONS//
+//
 //Generate a Random Short URL ID
 const generateRandomString = function() {
   const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -27,20 +50,24 @@ const generateRandomString = function() {
   return randomUrl;
 };
 
-/**HTML**/
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
+//HTML//
+//
+// app.get("/", (req, res) => {
+//   res.send("Hello!");
+// });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+// app.get("/urls.json", (req, res) => {
+//   res.json(urlDatabase);
+// });
 
-/****ROUTES****/
+// app.get("/hello", (req, res) => {
+//   res.send("<html><body>Hello <b>World</b></body></html>\n");
+// });
+
+
+//ROUTES
+//
 // GET route for new url page
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
@@ -65,7 +92,7 @@ app.post("/urls", (req, res) =>{
   res.redirect(`/urls/${id}`);
 });
 
-//GET any request to the short url an take it to its longURL
+//GET redirect the short url to its longURL
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id];
   if (!longURL) {
@@ -82,13 +109,46 @@ app.post('/urls/:id/delete', (req, res) =>{
   res.redirect("/urls");
 });
 
-//POST route to edit a shortURL
+//POST route to edit a shortURL.
 app.post('/urls/:id', (req, res) =>{
 const id = req.params.id;
 const newId = req.body.longURL;
 urlDatabase[id] = newId;
 res.redirect("/urls");
 });
+
+//GET to load the login page
+app.get('/login', (req, res) => {
+  res.render("login");
+})
+
+//POST to create an endpoint to the login page
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  if (!username || !password) {
+    return res.status(400).send("Please provide an username and password")
+  }
+
+  let findUser = null;
+  for (const userId in users) {
+    const user = users[userId];
+    if (user.username === username) {
+      findUser = user;
+    }
+  }
+    if (!findUser) {
+      return res.status(400).send (" No user with that username");
+    }
+    if (findUser.password !== password) {
+      return res.status(400).send ("Wrong password");
+    }
+  res.cookie("userId", findUser.id);
+  res.redirect("/urls");
+});
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on ${PORT}!`);

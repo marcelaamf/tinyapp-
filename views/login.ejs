@@ -8,29 +8,26 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
-    <title>URL - TinyApp Example</title>
+    <title>Login Page</title>
   </head>
 
   <body>
     <%- include('./partials/_header') %>
     <div class="card text-center">
-      <div class="card-header"></div>
       <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-        <p class="card-text">
-          Short URL ID: <a href="/u/<%= id %>"><%= id %></a>
-        </p>
+        <h1 class="card-title">Login Below</h1>
       </div>
-      <form method="POST" action="/urls/<%= id %>">
-        <div class="card-body" style="background-color: rgb(249, 249, 249);">
-          <h3 class="card-title">Edit</h3>
+      <div class="card-header"></div>      
+      <form method="POST" action="/login">
+        <div class="card-body">
           <p>
-            <label for="longURL">New URL:</label>
-            <input name="longURL" type="text" placeholder="http://">
+            <label>User Name:</label>
+            <input name="username">
+            <label>Password:</label>
+            <input name="password">
             <button
             type="submit" 
-            name="editUrl" 
-            class="btn btn-primary">Submit
+            class="btn btn-primary">Login
             </button>
           </p>
         </div>
