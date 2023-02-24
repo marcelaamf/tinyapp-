@@ -19,7 +19,7 @@
       </div>
     </div>
     <% if(user){ %>  
-      <h5 style="margin: 5px;">Logged in as : <%=user.username%></h5>
+      <h5 style="margin: 5px;">Logged in as : <%=user.email%></h5>
       <form method="post" action="/logout">
         <button type="submit" class="btn btn-outline-dark">Logout</button>
       </form>      
@@ -27,8 +27,8 @@
         <form method="POST" action="/login">
           <div class="card-body">
             <p>
-              <label>User Name:</label>
-              <input name="username">
+              <label>Email:</label>
+              <input name="email">
               <label>Password:</label>
               <input name="password">
               <button

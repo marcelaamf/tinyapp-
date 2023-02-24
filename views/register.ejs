@@ -8,26 +8,25 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
-    <title>Login Page</title>
+    <title>Register Page</title>
   </head>
 
   <body>
-    <%- include('./partials/_header') %>
-    <div class="card text-center">
+      <div class="card text-center">
       <div class="card-body">
-        <h1 class="card-title">Login Below</h1>
+        <h1 class="card-title">Register Below</h1>
       </div>
       <div class="card-header"></div>      
-      <form method="POST" action="/login">
+      <form method="POST" action="/register">
         <div class="card-body">
           <p>
-            <label>Email:</label>
-            <input name="email">
+            <label>email</label>
+            <input name="email" type="email">
             <label>Password:</label>
-            <input name="password">
+            <input name="password" type="password">
             <button
             type="submit" 
-            class="btn btn-primary">Login
+            class="btn btn-primary">Register
             </button>
           </p>
         </div>
