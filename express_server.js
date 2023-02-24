@@ -132,11 +132,15 @@ app.get('/login', (req, res) => {
 
 //GET to load the register page
 app.get('/register', (req, res) => {
-  if (req.cookies.userId) {
+  const userId = req.cookies.userId;
+  if (userId) {
     res.redirect("/urls")
   }
- 
-  res.render("register");
+  const user = users[userId];
+  const templateVars = {
+    user: user
+  };
+  res.render("register", templateVars);
 });
 
 
@@ -147,7 +151,7 @@ app.get('/register', (req, res) => {
 app.post("/urls", (req, res) =>{
   const id = generateRandomString();
   urlDatabase[id] = req.body.longURL;
-  res.redirect(`/urls/${id}`);
+  res.redirect(`/urls`);
 });
 
 //POST route to remove a URL 
@@ -173,10 +177,10 @@ app.post("/login", (req, res) => {
     return res.status(400).send("Please provide an email and password")
   }
    if (!findUserId (email, users)) {
-      return res.status(400).send ("No user with that email");
+      return res.status(403).send ("No user with that email");
     }
     if (findUserId (email, users).password !== password) {
-      return res.status(400).send ("Wrong password");
+      return res.status(403).send ("Wrong password");
     }
   res.cookie("userId", findUserId (email, users).id);
   res.redirect("/urls");
@@ -185,7 +189,7 @@ app.post("/login", (req, res) => {
 // Post to clear the user cookies and logout
 app.post("/logout", (req, res) => {
   res.clearCookie('userId');
-  res.redirect ("/urls");
+  res.redirect ("/login");
 });
 
 // Post to the register page

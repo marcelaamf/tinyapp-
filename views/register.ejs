@@ -12,24 +12,28 @@
   </head>
 
   <body>
-      <div class="card text-center">
+    <%- include('partials/_header') %>
       <div class="card-body">
-        <h1 class="card-title">Register Below</h1>
+        <h1 class="card-title">Create Account</h1>
       </div>
       <div class="card-header"></div>      
       <form method="POST" action="/register">
         <div class="card-body">
           <p>
-            <label>email</label>
-            <input name="email" type="email">
-            <label>Password:</label>
-            <input name="password" type="password">
-            <button
+            <label style ="font-weight: bold;">Email Address:</label>
+            <br/>
+            <input name="email" type="email" placeholder="Enter email"> 
+            <br/>
+            <label style ="font-weight: bold;">Password:</label>
+            <br/>
+            <input name="password" type="password" placeholder="Password">
+            <br/>
+            <button style ="margin-top: 10px;"
             type="submit" 
             class="btn btn-primary">Register
             </button>
           </p>
-        </div>
+       
       </form>
       <div class="card-footer text-muted"></div>
     </div>
