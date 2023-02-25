@@ -10,9 +10,9 @@ Security measures were implemented such as hased passwords and encrypted cookies
 
 ## Final Product
 
-![Only logged users can access and see their URLs. They can edit and delete existing URLs from their database](https://github.com/marcelaamf/tinyapp-/blob/main/docs/urls-page.png?raw=true)
-![New users can register to the app](https://github.com/marcelaamf/tinyapp-/blob/main/docs/register-page.png?raw=true)
-![Users can create new shortened urls and save them in the database](https://github.com/marcelaamf/tinyapp-/blob/main/docs/create-short-urls-page.png?raw=true)
+!["Only logged users can access and see their URLs. They can edit and delete existing URLs from their database"](https://github.com/marcelaamf/tinyapp-/blob/main/docs/urls-page.png?raw=true)
+!["New users can register to the app"](https://github.com/marcelaamf/tinyapp-/blob/main/docs/register-page.png?raw=true)
+!["Users can create new shortened urls and save them in the database"](https://github.com/marcelaamf/tinyapp-/blob/main/docs/create-short-urls-page.png?raw=true)
 
 ## Dependencies
 
