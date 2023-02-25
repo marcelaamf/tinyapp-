@@ -6,7 +6,7 @@ Users can register to the app, and access their shortened URL library. Tha app a
 
 Only logged users can access, edit or delete the URLs library. The shortened URL redirects the user to the correspondent website. 
 
-Security measures were implemented such as hased passwords and encrypted cookies. 
+Security measures were implemented such as hashed passwords and encrypted cookies. 
 
 ## Final Product
 
