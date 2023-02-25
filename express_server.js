@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 8080;
 
+const bcrypt = require("bcryptjs");
 const morgan = require('morgan');
 const cookie = require('cookie-parser');
 
@@ -31,8 +32,8 @@ const users = {
   },
   mmn: {
     password: "456",
-    id: "mmn",
-    email: "mml@example.com"
+    id: "def",
+    email: "def@example.com"
   }
 };
 
@@ -79,6 +80,7 @@ const urlsForUser = function (userId) {
   }
 return urls;
 };
+
 
 //HTML////////////////////////////////////////////
 //
@@ -242,12 +244,21 @@ app.post("/login", (req, res) => {
   if (!email || !password) {
     return res.status(400).send("Please provide an email and password")
   }
-  if (!user || user.password !== password) {
+  
+  bcrypt.compare(password, user.password)
+    .then((result) => {
+      if (result) {
+        console.log ("password match?", result)
+        res.cookie("user_id", user.id)
+        res.redirect("/urls");
+      } else {
+      return res.status(401).send("Wrog email or password")
+      }
+  });  
+
+  if (!user || !user.password ) {
     return res.status(403).send("No user with that email or password");
   }
-     
-  res.cookie("user_id", user.id);
-  res.redirect("/urls");
 });
 
 // Post to clear the user cookies and logout
@@ -272,13 +283,18 @@ app.post("/register", (req, res) => {
     return res.status(400).send("This email is already in use");
   }
 
-  const newUser = {id, email, password}
-  users[id]= newUser
-  
-  res.cookie("user_id", newUser.id);
-  console.log (users)
-  
-  res.redirect ("/urls");
+  bcrypt.genSalt(10)
+    .then((salt) => {
+      return bcrypt.hash(password, salt);
+    })
+    .then((hash) => {
+      users[id]= {id, email, password: hash}
+      console.log("users: ", users)
+      
+      // res.cookie("user_id", users[id].id);
+      res.redirect ("/urls");
+    });
+    
 });
 
 app.listen(PORT, () => {
