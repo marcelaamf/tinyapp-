@@ -53,11 +53,22 @@ app.use(morgan('dev'));
 //GET ROUTES//////////////////////////////////
 //
 
+//Get route for / page
+app.get('/', (req, res) => {
+  const userId = req.session.user_id;
+  const user = users[userId];
+  if (!user) {
+    return res.redirect ("/login");
+  }
+  return res.redirect ("/urls");
+});
+
+
 // GET route for urls main page
 app.get("/urls", (req, res) => {
   const userId = req.session.user_id;
   const user = users[userId];
-  if (!user) {
+    if (!user) {
     return res.status(404).send("Please login first");
   }
   const urls = urlsForUser(user.id, urlDatabase);
@@ -82,12 +93,21 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const userId = req.session.user_id;
   const user = users[userId];
-  
-  if (!userId) {
-    return res.status(404).send("the requested URL is not in the user's list");
+  const shortURL = urlDatabase[req.params.id]
+ 
+  if (!userId && shortURL) {
+    return res.status(404).send("Please login first");
   }
-  const longURL = urlDatabase[req.params.id].longURL;
+ 
+  if (!shortURL) {
+    return res.status(404).send("The requested URL does not exist");
+  }
+  
+  if (userId !== shortURL.userId && urlDatabase) {
+    return res.status(404).send("The requested URL is not in the user's list");
+  }
 
+  const longURL = urlDatabase[req.params.id].longURL;
   const templateVars = {id: req.params.id, longURL, userId, user};
   res.render("urls_show", templateVars);
 });
@@ -137,7 +157,6 @@ app.get('/register', (req, res) => {
 app.post("/urls", (req, res) =>{
   const ids = generateRandomString();
   const user = req.session.user_id;
-  console.log(user);
   urlDatabase[ids] = {
     longURL: req.body.longURL,
     userId: user,

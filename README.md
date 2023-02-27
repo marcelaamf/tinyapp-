@@ -26,7 +26,7 @@ Security measures were implemented such as hashed passwords and encrypted cookie
 ## Getting Started
 
 - Install all dependencies (using the `npm install` command). 
-- Run the development web server using the `node express_server.js` command.
+- Run the development web server using the `npm start` command.
 - On your browser, navigate to the localhost:8080/register.
   - If the 8080 Port is in use, select the Port of your choice and update the const PORT on the express_server.js file.
   - Create a new user to login 
